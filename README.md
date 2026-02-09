@@ -11,8 +11,7 @@ Details: The path ('cd examples/endless') in step two of the document is incorre
 Path: endless-ts-sdk\examples\typescript\your_fungible_asset.ts  
 Details:  
 1.Hide the import information in the fourth row.  
-2.Since the command on line 48 needs to be executed locally, I encountered an error when running it here.  
-I have noted down the specific errors and their solutions in lines 44 to 47.  
+2.Since the command on line 48 needs to be executed locally, I encountered an error when running it here.I have noted down the specific errors and their solutions in lines 44 to 47.  
 
 ---
 
