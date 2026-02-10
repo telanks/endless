@@ -1,19 +1,40 @@
 import { Account, AccountAddress,NetworkToNetworkName, Endless, EndlessConfig, Ed25519PrivateKey, Network } from "../../dist/common/index";
 import axios from 'axios';
 
-//  const ENDLESS_NETWORK: Network = NetworkToNetworkName[Network.TESTNET] || Network.DEVNET;
-//  const config = new EndlessConfig({ network: ENDLESS_NETWORK });
-
-const config = new EndlessConfig({ 
-  network: Network.LOCAL, 
-  fullnode: "http://127.0.0.1:8080", 
-  indexer: " http://127.0.0.1:50051" 
+ const ENDLESS_NETWORK: Network = NetworkToNetworkName[Network.TESTNET] || Network.DEVNET;
+ const config = new EndlessConfig({ 
+  network: ENDLESS_NETWORK,
+  fullnode: "https://rpc-test.endless.link/v1",
+  indexer: "https://idx-test.endless.link/v1",
 });
+
  const endless = new Endless(config);
 
-console.log("Endless network:",config );
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
+async function getDigitalAssets(accountAddress: AccountAddress, nftName: string) {
+  const digitalAssetsOptions = {
+    method: 'GET',
+    url: 'https://idx-test.endless.link/api/v1/accounts/'+accountAddress+'/nfts?nft='+nftName
+  };
+  
+  // let aliceDigitalAssetsTotal = 0;
+  // let aliceDigitalAssets;
+
+  try {
+    const { data } = await axios.request(digitalAssetsOptions);
+    return data;
+    // aliceDigitalAssetsTotal = data.total;
+    // aliceDigitalAssets = data.data[0];
+    // console.log("Alice's digital assets balance: ",aliceDigitalAssetsTotal);
+    // console.log("Alice's digital asset:",JSON.stringify(aliceDigitalAssets, null, 2));
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function main() { 
 
@@ -61,39 +82,38 @@ async function main() {
 
     // Wait for transaction to be confirmed before querying
     await endless.waitForTransaction({ transactionHash: committedTxn.hash });
+    
+    // Wait for 5 seconds to ensure the transaction is completely on the chain.
+    await sleep(5000);
 
     // Try to get collection data with proper error handling
 
-    // const collectionDataOptions = {
-    //   method: 'GET',
-    //   url: 'https://idx-test.endless.link/api/v1/accounts/'+alice.accountAddress+'/collections?name='+collectionName
-    // };
+    const collectionDataOptions = {
+      method: 'GET',
+      url: 'https://idx-test.endless.link/api/v1/accounts/'+alice.accountAddress+'/collections?name='+collectionName
+    };
     
-    // try {
-    //   const { data } = await axios.request(collectionDataOptions);
-    //   console.log("Collection data:", data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    let aliceCollectionData: any[] = [];
 
     try {
-      const collectionId = await endless.getCollectionId({creatorAddress:alice.accountAddress, collectionName:collectionName})
-
-      //const collectionData = await endless.getCollectionData({creatorAddress:alice.accountAddress, collectionName:collectionName});
-      const collectionData = await endless.getCollectionDataByCollectionId({collectionId:collectionId});
-      console.log("Collection data:", collectionData);
+      const { data } = await axios.request(collectionDataOptions);
+      aliceCollectionData = data.data[0];
+      console.log("Alice's collection:", JSON.stringify(aliceCollectionData, null, 2));
     } catch (error) {
-      console.error("Could not fetch collection data:", error);
+      console.error(error);
     }
 
+
     console.log("\n=== Alice Mints the digital asset ===\n");
+
+    const nftName = 'Example Asset';
 
     const mintTokenTransaction = await endless.mintDigitalAssetTransaction({
       creator: alice,
       collection: collectionName,
       description: collectionDescription,
-      name: "Example Asset",
-      uri: tokenURI,
+      name: nftName,
+      uri: 'endless.dev/asset',
     });
     
     const mintTokenCommittedTxn = await endless.signAndSubmitTransaction({
@@ -103,66 +123,43 @@ async function main() {
 
     // Wait for transaction to be confirmed before querying
     await endless.waitForTransaction({ transactionHash: mintTokenCommittedTxn.hash });
-
-    let aliceDigitalAssets = await endless.getOwnedDigitalAssets({ownerAddress:alice.accountAddress})
     
+    // Wait for 5 seconds to ensure the transaction is completely on the chain.
+    await sleep(5000);
 
-    // const aliceDigitalAssetsOptions = {method: 'GET', url: 'https://idx-test.endless.link/api/v1/nfts/'+alice.accountAddress};
+    
+    let aliceDigitalAssetsData = await getDigitalAssets(alice.accountAddress,nftName);
 
-    // try {
-    //   const { data } = await axios.request(aliceDigitalAssetsOptions);
-    //   //aliceDigitalAssets = data.total;
-    //   //console.log("Alice's digital assets balance: ",data.total);
+    let aliceDigitalAssetsTotal = aliceDigitalAssetsData.total;
+    let aliceDigitalAssets = aliceDigitalAssetsData.data[0];
+    console.log("Alice's digital assets balance: ",aliceDigitalAssetsTotal);
+    console.log("Alice's digital asset:",JSON.stringify(aliceDigitalAssets, null, 2));
 
-    //   console.log("Alice's digital asset: ",data);
+    console.log("\n=== Transfer the digital asset to Bob ===\n");
 
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    //Only transfer if Alice has digital assets
+    const transferTransaction = await endless.transferDigitalAssetTransaction({
+      sender: alice,
+      digitalAssetAddress: aliceDigitalAssets.id,
+      recipient: bob.accountAddress,
+    });
 
-    console.log("Alice's digital assets balance: ",aliceDigitalAssets.length);
+    const transferResult = await endless.signAndSubmitTransaction({
+      signer: alice,
+      transaction: transferTransaction,
+    });
 
-    //Only attempt to get digital asset data if Alice has digital assets
-    if (aliceDigitalAssets.length > 0) {
-      try {
-        // Get the first digital asset from Alice's collection
-        const firstDigitalAsset = aliceDigitalAssets[0];
-        const digitalAssetData = await endless.getDigitalAssetData({digitalAssetAddress:firstDigitalAsset.current_token_data?.token_data_id || firstDigitalAsset.token_data_id})
-        console.log("Alice's digital asset: ",digitalAssetData);
-      } catch (error) {
-        console.error("Could not fetch digital asset data:", error);
-      }
-    }
+    await endless.waitForTransaction({ transactionHash: transferResult.hash });
 
-    console.log("\nTransfer the digital asset to Bob\n");
+    await sleep(10000);
 
-    // Only transfer if Alice has digital assets
-    if (aliceDigitalAssets.length > 0) {
-      const firstDigitalAsset = aliceDigitalAssets[0];
-      const transferTransaction = await endless.transferDigitalAssetTransaction({
-        sender: alice,
-        digitalAssetAddress: firstDigitalAsset.token_data_id || firstDigitalAsset.current_token_data?.token_data_id,
-        recipient: bob.accountAddress,
-      });
+    aliceDigitalAssetsData = await getDigitalAssets(alice.accountAddress,nftName);
 
-      const transferResult = await endless.signAndSubmitTransaction({
-        signer: alice,
-        transaction: transferTransaction,
-      });
+    console.log("Alice's digital assets balance: ",aliceDigitalAssetsData.total);
 
-      await endless.waitForTransaction({ transactionHash: transferResult.hash });
+    let bobDigitalAssetsData =  await getDigitalAssets(bob.accountAddress,nftName);
 
-      aliceDigitalAssets = await endless.getOwnedDigitalAssets({ownerAddress:alice.accountAddress})
-      
-      console.log("Alice's digital assets balance: ",aliceDigitalAssets.length);
-
-      const bobDigitalAssets = await endless.getOwnedDigitalAssets({ownerAddress:bob.accountAddress})
-
-      console.log("Bob's digital assets balance: ", bobDigitalAssets.length);
-    } else {
-      console.log("Alice has no digital assets to transfer");
-    }
-
+    console.log("Bob's digital assets balance: ", bobDigitalAssetsData.total);
 
 }
 
