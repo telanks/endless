@@ -31,7 +31,7 @@ Document revision suggestions: update 'cd examples/typescript-esm' to 'examples/
 
 ### Sample execution result :
 
-` === Addresses ===
+=== Addresses ===
 
 Alice's address is: 0xb25b18556473411a7d664ed2cba0a11b8515006b541b3342b4156130d674c7f7
 
@@ -57,41 +57,41 @@ Alice's collection: {
  "transfers": "0"  
 }
 
-=== Alice Mints the digital asset ===
+=== Alice Mints the digital asset ===  
 
-Alice's digital assets balance: 1
-Alice's digital asset: {
-"id": "EW3DhvRMy7svS2qLqnv375foXBm4Xdys3X9A5FdGCYzv",
-"name": "Example Asset",
-"index": 1,
-"collection": {
-"id": "FimVWjZtfxHtGHpymUc2uVsZwaYs8cs7rC2NhyZ1M4QM",
-"creator": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",
-"description": "This is Alice's simple collection",
-"name": "Alice's simple collection",
-"uri": "https://endless.dev",
-"current_supply": 1,
-"total_minted": 1,
-"max_supply": null,
-"royalty": {
-"percent": "0.00",
-"payee_address": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ"
-},
-"last_transaction_version": 354098851,
-"last_transaction_hash": "CsyekgVMX1o4QkCpCPKLdnurqUSWRPaEbwvjN6x9Fa7t",
-"holders": "1",
-"created_at": 1770709254,
-"transfers": "1"
-},
-"description": "This is Alice's simple collection",
-"uri": "endless.dev/asset",
-"owner": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",
-"properties": {},
-"last_transaction_version": 354098851,
-"last_transaction_hash": "CsyekgVMX1o4QkCpCPKLdnurqUSWRPaEbwvjN6x9Fa7t"
-}
+Alice's digital assets balance: 1  
+Alice's digital asset: {  
+"id": "EW3DhvRMy7svS2qLqnv375foXBm4Xdys3X9A5FdGCYzv",  
+"name": "Example Asset",  
+"index": 1,  
+"collection": {  
+"id": "FimVWjZtfxHtGHpymUc2uVsZwaYs8cs7rC2NhyZ1M4QM",  
+"creator": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",  
+"description": "This is Alice's simple collection",  
+"name": "Alice's simple collection",  
+"uri": "https://endless.dev",  
+"current_supply": 1,  
+"total_minted": 1,  
+"max_supply": null,  
+"royalty": {  
+"percent": "0.00",  
+"payee_address": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ"  
+},  
+"last_transaction_version": 354098851,  
+"last_transaction_hash": "CsyekgVMX1o4QkCpCPKLdnurqUSWRPaEbwvjN6x9Fa7t",  
+"holders": "1",  
+"created_at": 1770709254,  
+"transfers": "1"  
+},  
+"description": "This is Alice's simple collection",  
+"uri": "endless.dev/asset",  
+"owner": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",  
+"properties": {},  
+"last_transaction_version": 354098851,  
+"last_transaction_hash": "CsyekgVMX1o4QkCpCPKLdnurqUSWRPaEbwvjN6x9Fa7t"  
+}  
 
-=== Transfer the digital asset to Bob ===
+=== Transfer the digital asset to Bob ===  
 
-Alice's digital assets balance: 0
-Bob's digital assets balance: 1 `
+Alice's digital assets balance: 0  
+Bob's digital assets balance: 1  
