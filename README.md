@@ -31,30 +31,30 @@ Document revision suggestions: update 'cd examples/typescript-esm' to 'examples/
 
 ### Sample execution result :
 
-``=== Addresses ===
+` === Addresses ===
 
 Alice's address is: 0xb25b18556473411a7d664ed2cba0a11b8515006b541b3342b4156130d674c7f7
 
 === Creating Collection and Token ===
 
 Alice's collection: {  
-"id": "FimVWjZtfxHtGHpymUc2uVsZwaYs8cs7rC2NhyZ1M4QM",  
-"creator": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",  
-"description": "This is Alice's simple collection",  
-"name": "Alice's simple collection",  
-"uri": "https://endless.dev",  
-"current_supply": 0,  
-"total_minted": 0,  
-"max_supply": null,  
-"royalty": {  
-"percent": "0.00",  
-"payee_address": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ"  
-},
+ "id": "FimVWjZtfxHtGHpymUc2uVsZwaYs8cs7rC2NhyZ1M4QM",  
+ "creator": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ",  
+ "description": "This is Alice's simple collection",  
+ "name": "Alice's simple collection",  
+ "uri": "https://endless.dev",  
+ "current_supply": 0,  
+ "total_minted": 0,  
+ "max_supply": null,  
+ "royalty": {  
+ "percent": "0.00",  
+ "payee_address": "D1E8qa8FPWEu9R8jiE2mpnHwjzqmbUou4ugeNWwM7TtJ"  
+ },
 "last_transaction_version": 354098812,  
-"last_transaction_hash": "3ivXQjekmdUmZjxdpvFdSc8xtBiTa5L8fANJ7CmUgE5Y",  
-"holders": "0",  
-"created_at": 1770709254,  
-"transfers": "0"  
+ "last_transaction_hash": "3ivXQjekmdUmZjxdpvFdSc8xtBiTa5L8fANJ7CmUgE5Y",  
+ "holders": "0",  
+ "created_at": 1770709254,  
+ "transfers": "0"  
 }
 
 === Alice Mints the digital asset ===
@@ -94,4 +94,4 @@ Alice's digital asset: {
 === Transfer the digital asset to Bob ===
 
 Alice's digital assets balance: 0
-Bob's digital assets balance: 1 ``
+Bob's digital assets balance: 1 `
